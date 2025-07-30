@@ -1,0 +1,63 @@
+-- CreateTable
+CREATE TABLE `User` (
+    `userID` INTEGER NOT NULL AUTO_INCREMENT,
+    `firstname` VARCHAR(191) NOT NULL,
+    `lastname` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `role` ENUM('user', 'admin') NOT NULL DEFAULT 'user',
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`userID`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `tiket` (
+    `tiketID` INTEGER NOT NULL AUTO_INCREMENT,
+    `eventID` INTEGER NOT NULL,
+    `userID` INTEGER NOT NULL,
+    `seatID` INTEGER NOT NULL,
+    `bookedDate` DATETIME(3) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`tiketID`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `event` (
+    `eventID` INTEGER NOT NULL AUTO_INCREMENT,
+    `eventName` VARCHAR(191) NOT NULL,
+    `eventDate` DATETIME(3) NOT NULL,
+    `vanue` VARCHAR(191) NOT NULL,
+    `price` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAT` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`eventID`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `seat` (
+    `seatID` INTEGER NOT NULL AUTO_INCREMENT,
+    `eventID` INTEGER NOT NULL,
+    `rowNum` VARCHAR(191) NOT NULL,
+    `seatNum` INTEGER NOT NULL,
+    `status` BOOLEAN NOT NULL,
+    `createdAT` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAT` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`seatID`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `tiket` ADD CONSTRAINT `tiket_userID_fkey` FOREIGN KEY (`userID`) REFERENCES `User`(`userID`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `tiket` ADD CONSTRAINT `tiket_seatID_fkey` FOREIGN KEY (`seatID`) REFERENCES `seat`(`seatID`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `tiket` ADD CONSTRAINT `tiket_eventID_fkey` FOREIGN KEY (`eventID`) REFERENCES `event`(`eventID`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `seat` ADD CONSTRAINT `seat_eventID_fkey` FOREIGN KEY (`eventID`) REFERENCES `event`(`eventID`) ON DELETE RESTRICT ON UPDATE CASCADE;
