@@ -1,0 +1,58 @@
+ // This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User{
+  id_user Int @id @default(autoincrement())
+  nama_user String
+  role Role @default(pembeli)
+  transaksi transaksi[]
+}
+
+model mesin_cuci{
+  id_mesin Int @id @default(autoincrement())
+  merk String
+  HArga Int  
+  harga detail_transaksi[]
+  Transaksi transaksi[]
+}
+
+
+model transaksi{
+  id_transaksi Int @id @default(autoincrement())
+  id_user Int
+  idMesin Int
+  tgl DateTime @default(now())
+  idUser User @relation(fields: [id_user], references: [id_user])
+  id_mesiN mesin_cuci @relation(fields: [idMesin], references: [id_mesin])
+  status Status @default(selesai)
+  Transaksi detail_transaksi[]
+}
+
+model detail_transaksi{
+  id_detail_transaksi Int @id @default(autoincrement())
+  TransaksiId Int
+  mesinId Int
+  TRANSAKSI transaksi @relation(fields: [TransaksiId], references: [id_transaksi], onDelete: Cascade)
+  HARGA mesin_cuci @relation(fields: [mesinId], references: [id_mesin])
+}
+enum Status{
+  selesai
+  belum_selesai
+}
+enum Role{
+  admin
+  pembeli
+}
